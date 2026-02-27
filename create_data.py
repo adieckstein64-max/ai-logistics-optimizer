@@ -5,12 +5,16 @@ import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import FileReadTool
+from dotenv import load_dotenv
+
+# --- 0. טעינת הגדרות אבטחה ---
+load_dotenv()
 
 # --- 1. SETTINGS & DB CONNECTION (SQLAlchemy) ---
-DB_USER = "root"
-DB_PASS = "Adieck642001!" # עודכן עם הסיסמה שלך
-DB_HOST = "localhost"
-DB_NAME = "logistics_db"
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASS = os.getenv("DB_PASS")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_NAME = os.getenv("DB_NAME", "logistics_db")
 
 # חיבור מקצועי שמונע אזהרות
 engine = create_engine(f"mysql+mysqlconnector://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}")
@@ -23,24 +27,16 @@ except Exception as e:
     exit()
 
 # --- 2. ADVANCED ENGINEERING CALCULATIONS ---
-# מקדם רמת שירות ל-95%
 Z = 1.65
-# הערכת סטיית תקן של הביקוש (20% מהממוצע)
 df['Demand_Std_Dev'] = df['Daily_Demand_Avg'] * 0.2
-
-# חישוב מלאי ביטחון: Safety Stock = Z * StdDev * sqrt(LeadTime)
 df['Safety_Stock'] = np.ceil(Z * df['Demand_Std_Dev'] * np.sqrt(df['Lead_Time_Days']))
-
-# נקודת הזמנה מעודכנת (ROP) כולל מלאי ביטחון
 df['Reorder_Point'] = (df['Daily_Demand_Avg'] * df['Lead_Time_Days']) + df['Safety_Stock']
 df['Stock_Status'] = np.where(df['Current_Stock'] < df['Reorder_Point'], 'Restock', 'OK')
 
-# ניתוח ערך מלאי וסיווג ABC הנדסי
 df['Inventory_Value'] = df['Current_Stock'] * df['Unit_Cost']
 df['ABC_Class'] = np.where(df['Inventory_Value'] > 5000, 'A',
                   np.where(df['Inventory_Value'] > 2000, 'B', 'C'))
 
-# שמירה לקובץ עבור סוכני ה-AI
 df.to_csv('logistics_data_advanced.csv', index=False)
 
 # --- 3. UPDATED GRAPH (Matplotlib) ---
@@ -56,11 +52,15 @@ plt.savefig('advanced_inventory.png')
 print("Step 2: Engineering Graph Saved as 'advanced_inventory.png'.")
 
 # --- 4. STRATEGIC AI ANALYSIS (Groq) ---
-os.environ["GROQ_API_KEY"] = "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"
-groq_llm = LLM(model="groq/llama-3.3-70b-versatile", temperature=0.1)
+# שליפת המפתח מה-Environment Variables
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    print("Error: GROQ_API_KEY not found in .env file.")
+    exit()
+
+groq_llm = LLM(model="groq/llama-3.3-70b-versatile", temperature=0.1, api_key=GROQ_API_KEY)
 file_tool = FileReadTool(file_path='logistics_data_advanced.csv')
 
-# בניית צוות המנהלים
 analyst = Agent(
     role='Industrial Engineer',
     goal='Optimize inventory using Safety Stock logic',
