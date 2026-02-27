@@ -7,7 +7,7 @@ from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import FileReadTool
 from dotenv import load_dotenv
 
-# --- 0. טעינת הגדרות אבטחה ---
+# --- 0. security ---
 load_dotenv()
 
 # --- 1. SETTINGS & DB CONNECTION (SQLAlchemy) ---
