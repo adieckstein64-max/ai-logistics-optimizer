@@ -52,7 +52,7 @@ plt.savefig('advanced_inventory.png')
 print("Step 2: Engineering Graph Saved as 'advanced_inventory.png'.")
 
 # --- 4. STRATEGIC AI ANALYSIS (Groq) ---
-# שליפת המפתח מה-Environment Variables
+# -Environment Variables
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
     print("Error: GROQ_API_KEY not found in .env file.")
