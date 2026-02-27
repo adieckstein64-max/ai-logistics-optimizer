@@ -1,4 +1,0 @@
-imoprt numpy as np
-
-
-

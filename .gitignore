@@ -1,0 +1,15 @@
+# סביבה וירטואלית והגדרות עורך
+.venv/
+.idea/
+__pycache__/
+
+# קבצי סיסמאות (חשוב!)
+.env
+
+# קבצי לימודים שאתה רוצה להסתיר (תוסיף כאן מה שבא לך)
+"birth year.py"
+"at 23 i bought.py"
+"adi oop"
+"aalan.py"
+matplotlibsfaff.py
+"gas station"
