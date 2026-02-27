@@ -1,0 +1,6 @@
+SKU_ID,Product_Name,Current_Stock,Daily_Demand_Avg,Lead_Time_Days,Unit_Cost,Warehouse_Zone,Reorder_Point,Stock_Status,Inventory_Value,ABC_Class
+PART-101,Brake Pads,50,5,10,150,A,50,OK,7500,A
+PART-102,Oil Filter,120,10,5,45,B,50,OK,5400,A
+PART-103,Air Filter,15,8,14,30,C,112,Restock,450,C
+PART-104,Spark Plug,300,25,7,15,B,175,OK,4500,B
+PART-105,Tire,40,3,21,450,A,63,Restock,18000,A
