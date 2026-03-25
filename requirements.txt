@@ -1,0 +1,7 @@
+pandas
+numpy
+matplotlib
+mysql-connector-python
+python-dotenv
+crewai
+langchain-groq
